@@ -3,6 +3,7 @@ package tests;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pages.LeadDetailsPage;
 import pages.LeadsPage;
 import pages.NewLeadPage;
 
@@ -25,11 +26,12 @@ public class LeadsTest extends BaseTest {
     protected final static String EXPECTED_NAME = "Mr. " + FIRST_NAME + " " + LAST_NAME;
     private LeadsPage LeadsPage;
     private NewLeadPage NewLeadPage;
-
+    private LeadDetailsPage LeadDetailsPage;
     @BeforeClass
     public void initialise() {
         LeadsPage = new LeadsPage(driver);
         NewLeadPage = new NewLeadPage(driver);
+        LeadDetailsPage = new LeadDetailsPage(driver);
     }
 
     @Test(groups = {"regression"})
@@ -63,11 +65,11 @@ public class LeadsTest extends BaseTest {
         NewLeadPage.clickIndustry();
         NewLeadPage.clickIndustryApparel();
         NewLeadPage.clickSaveButton();
-        LeadsPage.waitForPageLoaded();
-        LeadsPage.getActualName();
-        Assert.assertEquals(LeadsPage.getActualName(), EXPECTED_NAME, "Name verification");
-        Assert.assertEquals(LeadsPage.getActualTitle(), TITLE, "Title verification");
-        Assert.assertEquals(LeadsPage.getActualPhone(), PHONE, "Phone verification");
-        Assert.assertEquals(LeadsPage.getActualEmail(), EMAIL, "Email verification");
+        LeadDetailsPage.waitForPageLoaded();
+        LeadDetailsPage.getActualName();
+        Assert.assertEquals(LeadDetailsPage.getActualName(), EXPECTED_NAME, "Name verification");
+        Assert.assertEquals(LeadDetailsPage.getActualTitle(), TITLE, "Title verification");
+        Assert.assertEquals(LeadDetailsPage.getActualPhone(), PHONE, "Phone verification");
+        Assert.assertEquals(LeadDetailsPage.getActualEmail(), EMAIL, "Email verification");
     }
 }

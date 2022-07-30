@@ -3,6 +3,7 @@ package tests;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pages.AccountDetailsPage;
 import pages.AccountsPage;
 import pages.NewAccountPage;
 
@@ -22,11 +23,13 @@ public class AccountsTest extends BaseTest {
     protected final static String EXPECTED_TYPE_ACCOUNT = "Analyst";
     private AccountsPage AccountsPage;
     private NewAccountPage NewAccountPage;
+    private AccountDetailsPage AccountDetailsPage;
 
     @BeforeClass
     public void initialise() {
         AccountsPage = new AccountsPage(driver);
         NewAccountPage = new NewAccountPage(driver);
+        AccountDetailsPage = new AccountDetailsPage(driver);
     }
 
     @Test(groups = {"regression"})
@@ -54,11 +57,11 @@ public class AccountsTest extends BaseTest {
         NewAccountPage.setBillingCountryAccount(BILLING_COUNTRY_ACCOUNT);
         NewAccountPage.clickCopyCheckbox();
         NewAccountPage.clickSaveAccountButton();
-        AccountsPage.waitForPageLoaded();
-        Assert.assertEquals(AccountsPage.getActualAccountName(), ACCOUNT_NAME, "Account name verification");
-        Assert.assertEquals(AccountsPage.getActualAccountType(), EXPECTED_TYPE_ACCOUNT, "Account type verification");
-        Assert.assertEquals(AccountsPage.getActualAccountPhone(), PHONE_ACCOUNT, "Account phone verification");
-        Assert.assertEquals(AccountsPage.getActualAccountWebsite(), WEBSITE_ACCOUNT, "Account website verification");
+        AccountDetailsPage.waitForPageLoaded();
+        Assert.assertEquals(AccountDetailsPage.getActualAccountName(), ACCOUNT_NAME, "Account name verification");
+        Assert.assertEquals(AccountDetailsPage.getActualAccountType(), EXPECTED_TYPE_ACCOUNT, "Account type verification");
+        Assert.assertEquals(AccountDetailsPage.getActualAccountPhone(), PHONE_ACCOUNT, "Account phone verification");
+        Assert.assertEquals(AccountDetailsPage.getActualAccountWebsite(), WEBSITE_ACCOUNT, "Account website verification");
 
     }
 }
