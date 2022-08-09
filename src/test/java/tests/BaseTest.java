@@ -4,14 +4,12 @@ import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 import pages.HomePage;
 import pages.LoginPage;
 
 import java.util.concurrent.TimeUnit;
+
 @Listeners(TestListener.class)
 public class BaseTest {
     protected final static String USER_NAME = "solodchenko13-ehck@force.com";
@@ -46,9 +44,9 @@ public class BaseTest {
         ((JavascriptExecutor) driver).executeScript(String.format("window.sessionStorage.clear();"));
     }
 
-   /* @AfterClass(alwaysRun = true)
+    @AfterClass(alwaysRun = true)
     public void finish() {
         this.driver.quit();
-    }*/
+    }
 
 }

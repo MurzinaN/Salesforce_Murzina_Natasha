@@ -41,7 +41,9 @@ public class HomePage extends BasePage {
         jsClick(driver.findElement(CONTACTS_TAB_LOCATOR));
     }
 
+
     public String getMessageText() {
+        waitForElementDisplayed(MESSAGE_LOCATOR);
         String actualText = driver.findElement(MESSAGE_LOCATOR).getText();
         return actualText;
     }

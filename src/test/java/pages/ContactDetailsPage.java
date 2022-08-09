@@ -6,6 +6,7 @@ import enums.Salutation;
 import models.Contact;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.StringSplit;
 
 public class ContactDetailsPage extends BasePage {
     private final static By ICON_CONTACT_DETAILS_LOCATOR = By.xpath("//records-highlights-icon");
@@ -21,15 +22,11 @@ public class ContactDetailsPage extends BasePage {
 
     public Contact getContactInfo() {
         String fullName = new LightningFormattedElement(driver, "Name").getText();
-        String[] fullNameSplit = fullName.split("\\s");
-
+        StringSplit.fullNameSplit(fullName);
         String accountName = new LightningFormattedElement(driver, "Account Name").getText();
-        accountName = accountName.replace("Open", "");
-        accountName = accountName.replace("Preview", "");
-        accountName = accountName.replace(" ", "");
-        Contact.ContactBuilder contactBuilder = new Contact.ContactBuilder(fullNameSplit[2], accountName);
-        contactBuilder.salutation(Salutation.fromString(fullNameSplit[0]));
-        contactBuilder.firstName(fullNameSplit[1]);
+        Contact.ContactBuilder contactBuilder = new Contact.ContactBuilder(StringSplit.fullNameSplit(fullName)[2], StringSplit.textSplit(accountName));
+        contactBuilder.salutation(Salutation.fromString(StringSplit.fullNameSplit(fullName)[0]));
+        contactBuilder.firstName(StringSplit.fullNameSplit(fullName)[1]);
         String phone = new LightningFormattedElement(driver, "Phone").getText();
         if (phone != "") {
             contactBuilder.phone(phone);

@@ -6,6 +6,7 @@ import enums.Type;
 import models.Account;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.StringSplit;
 
 public class AccountDetailsPage extends BasePage {
 
@@ -26,10 +27,7 @@ public class AccountDetailsPage extends BasePage {
         Account.AccountBuilder accountBuilder = new Account.AccountBuilder(accountName);
         String parentAccount = new LightningFormattedElement(driver, "Parent Account").getText();
         if (parentAccount != "") {
-            parentAccount = parentAccount.replace("Open", "");
-            parentAccount = parentAccount.replace("Preview", "");
-            parentAccount = parentAccount.replace(" ", "");
-            accountBuilder.parentAccount(parentAccount);
+            accountBuilder.parentAccount(StringSplit.textSplit(parentAccount));
         }
         String phone = new LightningFormattedElement(driver, "Phone").getText();
         if (phone != "") {

@@ -5,6 +5,7 @@ import enums.*;
 import models.Lead;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.StringSplit;
 
 public class LeadDetailsPage extends BasePage {
 
@@ -21,7 +22,7 @@ public class LeadDetailsPage extends BasePage {
 
     public Lead getLeadInfo() {
         String fullName = new LightningFormattedElement(driver, "Name").getText();
-        String[] fullNameSplit = fullName.split("\\s");
+        StringSplit.fullNameSplit(fullName);
         String fullAddress = new LightningFormattedElement(driver, "Address").getText();
         String street;
         String city;
@@ -48,9 +49,9 @@ public class LeadDetailsPage extends BasePage {
 
         String company = new LightningFormattedElement(driver, "Company").getText();
         String leadStatus = new LightningFormattedElement(driver, "Lead Status").getText();
-        Lead.LeadBuilder leadBuilder = new Lead.LeadBuilder(fullNameSplit[2], company, LeadStatus.fromString(leadStatus));
-        leadBuilder.salutation(Salutation.fromString(fullNameSplit[0]));
-        leadBuilder.firstName(fullNameSplit[1]);
+        Lead.LeadBuilder leadBuilder = new Lead.LeadBuilder(StringSplit.fullNameSplit(fullName)[2], company, LeadStatus.fromString(leadStatus));
+        leadBuilder.salutation(Salutation.fromString(StringSplit.fullNameSplit(fullName)[0]));
+        leadBuilder.firstName(StringSplit.fullNameSplit(fullName)[1]);
         leadBuilder.street(street);
         leadBuilder.city(city);
         leadBuilder.state(state);

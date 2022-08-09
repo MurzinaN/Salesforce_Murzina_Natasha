@@ -16,14 +16,12 @@ public class LeadsTest extends BaseTest {
     private LeadsPage LeadsPage;
     private NewLeadPage NewLeadPage;
     private LeadDetailsPage LeadDetailsPage;
-    private Message Message;
 
     @BeforeClass
     public void initialise() {
         LeadsPage = new LeadsPage(driver);
         NewLeadPage = new NewLeadPage(driver);
         LeadDetailsPage = new LeadDetailsPage(driver);
-        Message = new Message();
     }
 
     @Test(groups = {"regression"}, dataProvider = "leadTestData")
@@ -34,14 +32,12 @@ public class LeadsTest extends BaseTest {
         LeadsPage.waitForPageLoaded();
         LeadsPage.clickNewButton();
         NewLeadPage.waitForPageLoaded();
-        Lead testLead = newLead;
-        NewLeadPage.fillForm(testLead);
+        NewLeadPage.fillForm(newLead);
         NewLeadPage.clickSaveButton();
         LeadDetailsPage.waitForPageLoaded();
-        HomePage.getMessageText();
-        Assert.assertEquals(HomePage.getMessageText(), Message.expectedLeadMessageText(testLead.getSalutation().getName(), testLead.getFirstName(), testLead.getLastName()));
+        Assert.assertEquals(HomePage.getMessageText(), Message.expectedLeadMessageText(newLead.getSalutation().getName(), newLead.getFirstName(), newLead.getLastName()));
         LeadDetailsPage.getLeadInfo();
-        Assert.assertEquals(LeadDetailsPage.getLeadInfo(), testLead);
+        Assert.assertEquals(LeadDetailsPage.getLeadInfo(), newLead);
         HomePage.clickLogout();
     }
 

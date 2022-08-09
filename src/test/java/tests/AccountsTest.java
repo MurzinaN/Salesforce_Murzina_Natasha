@@ -17,14 +17,12 @@ public class AccountsTest extends BaseTest {
     private AccountsPage AccountsPage;
     private NewAccountPage NewAccountPage;
     private AccountDetailsPage AccountDetailsPage;
-    private utils.Message Message;
 
     @BeforeClass
     public void initialise() {
         AccountsPage = new AccountsPage(driver);
         NewAccountPage = new NewAccountPage(driver);
         AccountDetailsPage = new AccountDetailsPage(driver);
-        Message = new Message();
     }
 
     @Test(groups = {"regression"}, dataProvider = "AccountTestData")
@@ -35,14 +33,12 @@ public class AccountsTest extends BaseTest {
         AccountsPage.waitForPageLoaded();
         AccountsPage.clickNewButton();
         NewAccountPage.waitForPageLoaded();
-        Account testAccount = newAccount;
-        NewAccountPage.fillForm(testAccount);
+        NewAccountPage.fillForm(newAccount);
         NewAccountPage.clickSaveButton();
         AccountDetailsPage.waitForPageLoaded();
-        HomePage.getMessageText();
-        Assert.assertEquals(HomePage.getMessageText(), Message.expectedAccountMessageText(testAccount.getAccountName()));
+        Assert.assertEquals(HomePage.getMessageText(), Message.expectedAccountMessageText(newAccount.getAccountName()));
         AccountDetailsPage.getAccountInfo();
-        Assert.assertEquals(AccountDetailsPage.getAccountInfo(), testAccount);
+        Assert.assertEquals(AccountDetailsPage.getAccountInfo(), newAccount);
         HomePage.clickLogout();
     }
 

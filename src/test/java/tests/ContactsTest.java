@@ -16,14 +16,12 @@ public class ContactsTest extends BaseTest {
     private ContactsPage ContactsPage;
     private NewContactPage NewContactPage;
     private ContactDetailsPage ContactDetailsPage;
-    private utils.Message Message;
 
     @BeforeClass
     public void initialise() {
         ContactsPage = new ContactsPage(driver);
         NewContactPage = new NewContactPage(driver);
         ContactDetailsPage = new ContactDetailsPage(driver);
-        Message = new Message();
     }
 
     @Test(groups = {"regression"}, dataProvider = "ContactTestData")
@@ -34,14 +32,12 @@ public class ContactsTest extends BaseTest {
         ContactsPage.waitForPageLoaded();
         ContactsPage.clickNewButton();
         NewContactPage.waitForPageLoaded();
-        Contact testContact = newContact;
-        NewContactPage.fillForm(testContact);
+        NewContactPage.fillForm(newContact);
         NewContactPage.clickSaveButton();
         ContactDetailsPage.waitForPageLoaded();
-        HomePage.getMessageText();
-        Assert.assertEquals(HomePage.getMessageText(), Message.expectedContactMessageText(testContact.getSalutation().getName(), testContact.getFirstName(), testContact.getLastName()));
+        Assert.assertEquals(HomePage.getMessageText(), Message.expectedContactMessageText(newContact.getSalutation().getName(), newContact.getFirstName(), newContact.getLastName()));
         ContactDetailsPage.getContactInfo();
-        Assert.assertEquals(ContactDetailsPage.getContactInfo(), testContact);
+        Assert.assertEquals(ContactDetailsPage.getContactInfo(), newContact);
         HomePage.clickLogout();
     }
 
