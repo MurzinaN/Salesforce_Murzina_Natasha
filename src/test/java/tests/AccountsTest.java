@@ -1,67 +1,88 @@
 package tests;
 
+import enums.Industry;
+import enums.Type;
+import models.Account;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.AccountDetailsPage;
 import pages.AccountsPage;
-import pages.NewAccountPage;
+import pages.modal.NewAccountPage;
+import utils.Message;
 
 
 public class AccountsTest extends BaseTest {
-    protected final static String ACCOUNT_NAME = "FirstAccount";
-    protected final static String PHONE_ACCOUNT = "+375332548657";
-    protected final static String FAX_ACCOUNT = "+375332548658";
-    protected final static String WEBSITE_ACCOUNT = "new_account@gmail.com";
-    protected final static String EMPLOYEES_ACCOUNT = "50";
-    protected final static String ANNUAL_REVENUE_ACCOUNT = "700000";
-    protected final static String BILLING_STREET_ACCOUNT = "AccountStreet";
-    protected final static String BILLING_CITY_ACCOUNT = "AccountCity";
-    protected final static String BILLING_STATE_ACCOUNT = "AccountState";
-    protected final static String BILLING_ZIP_ACCOUNT = "21354";
-    protected final static String BILLING_COUNTRY_ACCOUNT = "Belarus";
-    protected final static String EXPECTED_TYPE_ACCOUNT = "Analyst";
     private AccountsPage AccountsPage;
     private NewAccountPage NewAccountPage;
     private AccountDetailsPage AccountDetailsPage;
+    private utils.Message Message;
 
     @BeforeClass
     public void initialise() {
         AccountsPage = new AccountsPage(driver);
         NewAccountPage = new NewAccountPage(driver);
         AccountDetailsPage = new AccountDetailsPage(driver);
+        Message = new Message();
     }
 
-    @Test(groups = {"regression"})
-    public void createAccountTest() throws InterruptedException {
+    @Test(groups = {"regression"}, dataProvider = "AccountTestData")
+    public void createAccountTest(Account newAccount) throws InterruptedException {
         LoginPage.login(USER_NAME, PASSWORD);
         HomePage.waitForPageLoaded();
         HomePage.openAccountsTab();
         AccountsPage.waitForPageLoaded();
-        AccountsPage.clickNewAccountButton();
+        AccountsPage.clickNewButton();
         NewAccountPage.waitForPageLoaded();
-        NewAccountPage.setAccountName(ACCOUNT_NAME);
-        NewAccountPage.setPhone(PHONE_ACCOUNT);
-        NewAccountPage.setFax(FAX_ACCOUNT);
-        NewAccountPage.setWebsiteAccount(WEBSITE_ACCOUNT);
-        NewAccountPage.setEmployeesAccount(EMPLOYEES_ACCOUNT);
-        NewAccountPage.setAnnualRevenueAccount(ANNUAL_REVENUE_ACCOUNT);
-        NewAccountPage.clickTypeAccount();
-        NewAccountPage.clickTypeAnalystAccount();
-        NewAccountPage.clickIndustryAccount();
-        NewAccountPage.clickIndustryBankingAccount();
-        NewAccountPage.setBillingStreetAccount(BILLING_STREET_ACCOUNT);
-        NewAccountPage.setBillingCityAccount(BILLING_CITY_ACCOUNT);
-        NewAccountPage.setBillingStateAccount(BILLING_STATE_ACCOUNT);
-        NewAccountPage.setBillingZipAccount(BILLING_ZIP_ACCOUNT);
-        NewAccountPage.setBillingCountryAccount(BILLING_COUNTRY_ACCOUNT);
-        NewAccountPage.clickCopyCheckbox();
-        NewAccountPage.clickSaveAccountButton();
+        Account testAccount = newAccount;
+        NewAccountPage.fillForm(testAccount);
+        NewAccountPage.clickSaveButton();
         AccountDetailsPage.waitForPageLoaded();
-        Assert.assertEquals(AccountDetailsPage.getActualAccountName(), ACCOUNT_NAME, "Account name verification");
-        Assert.assertEquals(AccountDetailsPage.getActualAccountType(), EXPECTED_TYPE_ACCOUNT, "Account type verification");
-        Assert.assertEquals(AccountDetailsPage.getActualAccountPhone(), PHONE_ACCOUNT, "Account phone verification");
-        Assert.assertEquals(AccountDetailsPage.getActualAccountWebsite(), WEBSITE_ACCOUNT, "Account website verification");
+        HomePage.getMessageText();
+        Assert.assertEquals(HomePage.getMessageText(), Message.expectedAccountMessageText(testAccount.getAccountName()));
+        AccountDetailsPage.getAccountInfo();
+        Assert.assertEquals(AccountDetailsPage.getAccountInfo(), testAccount);
+        HomePage.clickLogout();
+    }
 
+    @DataProvider
+    public Object[][] AccountTestData() {
+        return new Object[][]{
+                {new Account.AccountBuilder(faker.name().username())
+                        .parentAccount("myAccount")
+                        .phone(faker.phoneNumber().phoneNumber())
+                        .fax(faker.phoneNumber().phoneNumber())
+                        .website(faker.internet().url())
+                        .employees("10")
+                        .annualRevenue("587")
+                        .type(Type.ANALYST)
+                        .industry(Industry.INSURANCE)
+                        .description(faker.name().username())
+                        .billingStreet(faker.name().username())
+                        .billingCity(faker.name().username())
+                        .billingState(faker.name().username())
+                        .billingZip(faker.address().zipCode())
+                        .billingCountry(faker.name().username())
+                        .shippingStreet(faker.name().username())
+                        .shippingCity(faker.name().username())
+                        .shippingState(faker.name().username())
+                        .shippingZip(faker.address().zipCode())
+                        .shippingCountry(faker.name().username())
+                        .build()},
+                {new Account.AccountBuilder(faker.name().username())
+                        .billingStreet(faker.name().username())
+                        .billingCity(faker.name().username())
+                        .billingState(faker.name().username())
+                        .billingZip(faker.address().zipCode())
+                        .billingCountry(faker.name().username())
+                        .shippingStreet(faker.name().username())
+                        .shippingCity(faker.name().username())
+                        .shippingState(faker.name().username())
+                        .shippingZip(faker.address().zipCode())
+                        .shippingCountry(faker.name().username())
+                        .build()},
+                {new Account.AccountBuilder(faker.name().username()).build()}
+        };
     }
 }
