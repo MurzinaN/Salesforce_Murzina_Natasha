@@ -1,23 +1,23 @@
 package tests;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 import pages.HomePage;
 import pages.LoginPage;
 
 import java.util.concurrent.TimeUnit;
 
+@Listeners(TestListener.class)
 public class BaseTest {
     protected final static String USER_NAME = "solodchenko13-ehck@force.com";
     protected final static String PASSWORD = "qa19qa19";
     protected WebDriver driver;
     protected LoginPage LoginPage;
     protected HomePage HomePage;
+    protected Faker faker;
 
     @BeforeClass(alwaysRun = true)
     public void setUp(ITestContext testContext) throws Exception {
@@ -29,6 +29,7 @@ public class BaseTest {
         testContext.setAttribute("driver", driver);
         LoginPage = new LoginPage(driver);
         HomePage = new HomePage(driver);
+        faker = new Faker();
     }
 
     @BeforeMethod(alwaysRun = true)

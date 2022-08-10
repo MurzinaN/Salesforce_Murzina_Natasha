@@ -1,15 +1,17 @@
 package pages;
 
+import elements.LightningFormattedElement;
+import enums.Industry;
+import enums.Type;
+import models.Account;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.StringSplit;
 
-public class AccountDetailsPage extends BasePage{
+public class AccountDetailsPage extends BasePage {
 
-    By actualAccountNameLocator = By.xpath("//h1/div[contains(text(),'Account')]/parent::h1/descendant::lightning-formatted-text");
-    By actualAccountTypeLocator = By.xpath("//p[contains(text(),'Type')]/parent::div/descendant::lightning-formatted-text");
-    By actualAccountPhoneLocator = By.xpath("//p[contains(text(),'Phone')]/parent::div/descendant::lightning-formatted-phone/a");
-    By actualAccountWebsiteLocator = By.xpath("//p[contains(text(),'Website')]/parent::div/descendant::a");
     private final static By ICON_ACCOUNT_DETAILS_LOCATOR = By.xpath("//records-highlights-icon");
+
     public AccountDetailsPage(WebDriver driver) {
         super(driver);
     }
@@ -18,23 +20,107 @@ public class AccountDetailsPage extends BasePage{
     public void waitForPageLoaded() {
         waitForElementDisplayed(ICON_ACCOUNT_DETAILS_LOCATOR);
     }
-    public String getActualAccountName() {
-        String actualAccountName = driver.findElement(actualAccountNameLocator).getText();
-        return actualAccountName;
+
+    public Account getAccountInfo() {
+        String accountName = new LightningFormattedElement(driver, "Account Name").getText();
+
+        Account.AccountBuilder accountBuilder = new Account.AccountBuilder(accountName);
+        String parentAccount = new LightningFormattedElement(driver, "Parent Account").getText();
+        if (parentAccount != "") {
+            accountBuilder.parentAccount(StringSplit.textSplit(parentAccount));
+        }
+        String phone = new LightningFormattedElement(driver, "Phone").getText();
+        if (phone != "") {
+            accountBuilder.phone(phone);
+        }
+        String fax = new LightningFormattedElement(driver, "Fax").getText();
+        if (fax != "") {
+            accountBuilder.fax(fax);
+        }
+        String website = new LightningFormattedElement(driver, "Website").getText();
+        if (website != "") {
+            accountBuilder.website(website);
+        }
+        String type = new LightningFormattedElement(driver, "Type").getText();
+        if (type != "") {
+            accountBuilder.type(Type.fromString(type));
+        }
+        String industry = new LightningFormattedElement(driver, "Industry").getText();
+        if (industry != "") {
+            accountBuilder.industry(Industry.fromString(industry));
+        }
+        String employees = new LightningFormattedElement(driver, "Employees").getText();
+        if (employees != "") {
+            accountBuilder.employees(employees);
+        }
+        String annualRevenue = new LightningFormattedElement(driver, "Annual Revenue").getText();
+        if (annualRevenue != "") {
+            annualRevenue = annualRevenue.replace("$", "");
+            accountBuilder.annualRevenue(annualRevenue);
+        }
+        String description = new LightningFormattedElement(driver, "Description").getText();
+        if (description != "") {
+            accountBuilder.description(description);
+        }
+        String billingAddress = new LightningFormattedElement(driver, "Billing Address").getText();
+        String billingStreet;
+        String billingCity;
+        String billingState;
+        String billingZip;
+        String billingCountry;
+        if (billingAddress != "") {
+            billingAddress = billingAddress.replace(",", " ");
+            billingAddress = billingAddress.replace("\n", " ");
+            billingAddress = billingAddress.replace("  ", " ");
+            String[] billingAddressSplit = billingAddress.split("\\s");
+            billingStreet = billingAddressSplit[0];
+            billingCity = billingAddressSplit[1];
+            billingState = billingAddressSplit[2];
+            billingZip = billingAddressSplit[3];
+            billingCountry = billingAddressSplit[4];
+        } else {
+            billingStreet = null;
+            billingCity = null;
+            billingState = null;
+            billingZip = null;
+            billingCountry = null;
+        }
+        accountBuilder.billingStreet(billingStreet);
+        accountBuilder.billingCity(billingCity);
+        accountBuilder.billingState(billingState);
+        accountBuilder.billingZip(billingZip);
+        accountBuilder.billingCountry(billingCountry);
+        String shippingAddress = new LightningFormattedElement(driver, "Shipping Address").getText();
+        String shippingStreet;
+        String shippingCity;
+        String shippingState;
+        String shippingZip;
+        String shippingCountry;
+        if (shippingAddress != "") {
+            shippingAddress = shippingAddress.replace(",", " ");
+            shippingAddress = shippingAddress.replace("\n", " ");
+            shippingAddress = shippingAddress.replace("  ", " ");
+            String[] shippingAddressSplit = shippingAddress.split("\\s");
+            shippingStreet = shippingAddressSplit[0];
+            shippingCity = shippingAddressSplit[1];
+            shippingState = shippingAddressSplit[2];
+            shippingZip = shippingAddressSplit[3];
+            shippingCountry = shippingAddressSplit[4];
+        } else {
+            shippingStreet = null;
+            shippingCity = null;
+            shippingState = null;
+            shippingZip = null;
+            shippingCountry = null;
+        }
+        accountBuilder.shippingStreet(shippingStreet);
+        accountBuilder.shippingCity(shippingCity);
+        accountBuilder.shippingState(shippingState);
+        accountBuilder.shippingZip(shippingZip);
+        accountBuilder.shippingCountry(shippingCountry);
+
+        return accountBuilder.build();
+
     }
 
-    public String getActualAccountType() {
-        String actualAccountType = driver.findElement(actualAccountTypeLocator).getText();
-        return actualAccountType;
-    }
-
-    public String getActualAccountPhone() {
-        String actualAccountPhone = driver.findElement(actualAccountPhoneLocator).getText();
-        return actualAccountPhone;
-    }
-
-    public String getActualAccountWebsite() {
-        String actualAccountWebsite = driver.findElement(actualAccountWebsiteLocator).getText();
-        return actualAccountWebsite;
-    }
 }

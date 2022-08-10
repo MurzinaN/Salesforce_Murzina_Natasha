@@ -1,14 +1,14 @@
 package pages;
 
+import elements.LightningFormattedElement;
+import enums.*;
+import models.Lead;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import utils.StringSplit;
 
-public class LeadDetailsPage extends BasePage{
+public class LeadDetailsPage extends BasePage {
 
-    By actualNameLocator = By.xpath("//h1/slot/lightning-formatted-name");
-    By actualTitleLocator = By.xpath("//p[contains(text(),'Title')]/parent::div/descendant::lightning-formatted-text");
-    By actualPhoneLocator = By.xpath("//p[contains(text(),'Phone (2) ')]/ancestor::button/following-sibling::slot/descendant::a");
-    By actualEmailLocator = By.xpath("//p[contains(text(),'Email')]/parent::div/descendant::a");
     private final static By ICON_LEAD_DETAILS_LOCATOR = By.xpath("//records-highlights-icon");
 
     public LeadDetailsPage(WebDriver driver) {
@@ -19,23 +19,86 @@ public class LeadDetailsPage extends BasePage{
     public void waitForPageLoaded() {
         waitForElementDisplayed(ICON_LEAD_DETAILS_LOCATOR);
     }
-    public String getActualName() {
-        String actualName = driver.findElement(actualNameLocator).getText();
-        return actualName;
-    }
 
-    public String getActualTitle() {
-        String actualTitle = driver.findElement(actualTitleLocator).getText();
-        return actualTitle;
-    }
+    public Lead getLeadInfo() {
+        String fullName = new LightningFormattedElement(driver, "Name").getText();
+        StringSplit.fullNameSplit(fullName);
+        String fullAddress = new LightningFormattedElement(driver, "Address").getText();
+        String street;
+        String city;
+        String state;
+        String zip;
+        String country;
+        if (fullAddress != "") {
+            fullAddress = fullAddress.replace(",", " ");
+            fullAddress = fullAddress.replace("\n", " ");
+            fullAddress = fullAddress.replace("  ", " ");
+            String[] fullAddressSplit = fullAddress.split("\\s");
+            street = fullAddressSplit[0];
+            city = fullAddressSplit[1];
+            state = fullAddressSplit[2];
+            zip = fullAddressSplit[3];
+            country = fullAddressSplit[4];
+        } else {
+            street = null;
+            city = null;
+            state = null;
+            zip = null;
+            country = null;
+        }
 
-    public String getActualPhone() {
-        String actualPhone = driver.findElement(actualPhoneLocator).getText();
-        return actualPhone;
-    }
-
-    public String getActualEmail() {
-        String actualEmail = driver.findElement(actualEmailLocator).getText();
-        return actualEmail;
+        String company = new LightningFormattedElement(driver, "Company").getText();
+        String leadStatus = new LightningFormattedElement(driver, "Lead Status").getText();
+        Lead.LeadBuilder leadBuilder = new Lead.LeadBuilder(StringSplit.fullNameSplit(fullName)[2], company, LeadStatus.fromString(leadStatus));
+        leadBuilder.salutation(Salutation.fromString(StringSplit.fullNameSplit(fullName)[0]));
+        leadBuilder.firstName(StringSplit.fullNameSplit(fullName)[1]);
+        leadBuilder.street(street);
+        leadBuilder.city(city);
+        leadBuilder.state(state);
+        leadBuilder.zip(zip);
+        leadBuilder.country(country);
+        String phone = new LightningFormattedElement(driver, "Phone").getText();
+        if (phone != "") {
+            leadBuilder.phone(phone);
+        }
+        String email = new LightningFormattedElement(driver, "Email").getText();
+        if (email != "") {
+            leadBuilder.email(email);
+        }
+        String title = new LightningFormattedElement(driver, "Title").getText();
+        if (title != "") {
+            leadBuilder.title(title);
+        }
+        String rating = new LightningFormattedElement(driver, "Rating").getText();
+        if (rating != "") {
+            leadBuilder.rating(Rating.fromString(rating));
+        }
+        String website = new LightningFormattedElement(driver, "Website").getText();
+        if (website != "") {
+            leadBuilder.website(website);
+        }
+        String noOfEmployees = new LightningFormattedElement(driver, "No. of Employees").getText();
+        if (noOfEmployees != "") {
+            leadBuilder.noOfEmployees(noOfEmployees);
+        }
+        String annualRevenue = new LightningFormattedElement(driver, "Annual Revenue").getText();
+        annualRevenue = annualRevenue.replace("$", "");
+        if (annualRevenue != "") {
+            leadBuilder.annualRevenue(annualRevenue);
+        }
+        String leadSource = new LightningFormattedElement(driver, "Lead Source").getText();
+        if (leadSource != "") {
+            leadBuilder.leadSource(LeadSource.fromString(leadSource));
+        }
+        String industry = new LightningFormattedElement(driver, "Industry").getText();
+        if (industry != "") {
+            leadBuilder.industry(Industry.fromString(industry));
+        }
+        String description = new LightningFormattedElement(driver, "Description").getText();
+        if (description != "") {
+            leadBuilder.description(description);
+        }
+        return leadBuilder.build();
     }
 }
+
