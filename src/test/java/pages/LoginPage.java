@@ -1,11 +1,13 @@
 package pages;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@Log4j2
 public class LoginPage extends BasePage {
 
-    private final static String URL = "https://tmsqa198.my.salesforce.com/";
+    private final static String URL = "https://tmsqa1982.my.salesforce.com/";
     private final static By usernameInput = By.cssSelector("input#username");
     private final static By passwordInput = By.cssSelector("input#password");
     private final static By loginButton = By.cssSelector("input#Login");
@@ -32,6 +34,7 @@ public class LoginPage extends BasePage {
     }
 
     public void login(String userName, String password) {
+        log.info(String.format("Login with username: %s", userName));
         setUserName(userName);
         setPassword(password);
         clickLoginButton();

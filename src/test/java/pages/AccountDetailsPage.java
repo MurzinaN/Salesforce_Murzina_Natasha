@@ -3,11 +3,13 @@ package pages;
 import elements.LightningFormattedElement;
 import enums.Industry;
 import enums.Type;
+import lombok.extern.log4j.Log4j2;
 import models.Account;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import utils.StringSplit;
 
+@Log4j2
 public class AccountDetailsPage extends BasePage {
 
     private final static By ICON_ACCOUNT_DETAILS_LOCATOR = By.xpath("//records-highlights-icon");
@@ -22,9 +24,10 @@ public class AccountDetailsPage extends BasePage {
     }
 
     public Account getAccountInfo() {
+        log.info("Filling form Account with recived data");
         String accountName = new LightningFormattedElement(driver, "Account Name").getText();
 
-        Account.AccountBuilder accountBuilder = new Account.AccountBuilder(accountName);
+        Account.AccountBuilder accountBuilder = Account.builder().accountName(accountName);
         String parentAccount = new LightningFormattedElement(driver, "Parent Account").getText();
         if (parentAccount != "") {
             accountBuilder.parentAccount(StringSplit.textSplit(parentAccount));
@@ -55,8 +58,7 @@ public class AccountDetailsPage extends BasePage {
         }
         String annualRevenue = new LightningFormattedElement(driver, "Annual Revenue").getText();
         if (annualRevenue != "") {
-            annualRevenue = annualRevenue.replace("$", "");
-            accountBuilder.annualRevenue(annualRevenue);
+            accountBuilder.annualRevenue(StringSplit.dollarSplit(annualRevenue));
         }
         String description = new LightningFormattedElement(driver, "Description").getText();
         if (description != "") {

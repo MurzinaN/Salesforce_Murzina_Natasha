@@ -4,10 +4,12 @@ import elements.DropdownAccount;
 import elements.Input;
 import elements.SelectAccount;
 import elements.TextAreaAccount;
+import lombok.extern.log4j.Log4j2;
 import models.Account;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@Log4j2
 public class NewAccountPage extends BaseModal {
     By copyCheckbox = By.xpath("//*[contains(text(),'Copy Billing Address to Shipping Address')]/ancestor::div[1]/input[@type='checkbox']");
 
@@ -16,6 +18,7 @@ public class NewAccountPage extends BaseModal {
     }
 
     public void fillForm(Account inputAccount) {
+        log.info("Filling form Account");
         new Input(driver, "Account Name").setValueAccount(inputAccount.getAccountName());
         new SelectAccount(driver, "Parent Account").selectOption(inputAccount.getParentAccount());
         new Input(driver, "Phone").setValueAccount(inputAccount.getPhone());
@@ -23,8 +26,12 @@ public class NewAccountPage extends BaseModal {
         new Input(driver, "Website").setValueAccount(inputAccount.getWebsite());
         new Input(driver, "Employees").setValueAccount(inputAccount.getEmployees());
         new Input(driver, "Annual Revenue").setValueAccount(inputAccount.getAnnualRevenue());
-        new DropdownAccount(driver, "Type").selectByVisibleAccountText(inputAccount.getType().getName());
-        new DropdownAccount(driver, "Industry").selectByVisibleAccountText(inputAccount.getIndustry().getName());
+        if (inputAccount.getType() != null) {
+            new DropdownAccount(driver, "Type").selectByVisibleAccountText(inputAccount.getType().getName());
+        }
+        if (inputAccount.getIndustry() != null) {
+            new DropdownAccount(driver, "Industry").selectByVisibleAccountText(inputAccount.getIndustry().getName());
+        }
         new TextAreaAccount(driver, "Description").setValueTextAccount(inputAccount.getDescription());
         new TextAreaAccount(driver, "Billing Street").setValueTextAccount(inputAccount.getBillingStreet());
         new Input(driver, "Billing City").setValueAccount(inputAccount.getBillingCity());
