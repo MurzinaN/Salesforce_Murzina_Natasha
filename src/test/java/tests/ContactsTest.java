@@ -15,14 +15,12 @@ public class ContactsTest extends BaseTest {
     private ContactsPage ContactsPage;
     private NewContactPage NewContactPage;
     private ContactDetailsPage ContactDetailsPage;
-    private ContactFactory ContactFactory;
 
     @BeforeClass
     public void initialise() {
         ContactsPage = new ContactsPage(driver);
         NewContactPage = new NewContactPage(driver);
         ContactDetailsPage = new ContactDetailsPage(driver);
-        ContactFactory = new ContactFactory();
     }
 
     @Test(groups = {"regression"}, dataProvider = "ContactTestData")

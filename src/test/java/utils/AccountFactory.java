@@ -6,9 +6,9 @@ import enums.Type;
 import models.Account;
 
 public class AccountFactory {
-    Faker faker = new Faker();
+    private static final Faker faker = new Faker();
 
-    public Account getAccountWithAllItems() {
+    public static Account getAccountWithAllItems() {
         return Account.builder().accountName(faker.name().username())
                 .parentAccount("myAccount")
                 .phone(faker.phoneNumber().phoneNumber())
@@ -32,7 +32,7 @@ public class AccountFactory {
                 .build();
     }
 
-    public Account getAccountWithAddress() {
+    public static Account getAccountWithAddress() {
         return Account.builder().accountName(faker.name().username())
                 .billingStreet(faker.name().username())
                 .billingCity(faker.name().username())
@@ -47,7 +47,7 @@ public class AccountFactory {
                 .build();
     }
 
-    public Account getAccountWithoutAddress() {
+    public static Account getAccountWithoutAddress() {
         return Account.builder().accountName(faker.name().username())
                 .build();
     }

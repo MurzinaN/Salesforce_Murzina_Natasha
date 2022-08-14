@@ -16,14 +16,12 @@ public class AccountsTest extends BaseTest {
     private AccountsPage AccountsPage;
     private NewAccountPage NewAccountPage;
     private AccountDetailsPage AccountDetailsPage;
-    private utils.AccountFactory AccountFactory;
 
     @BeforeClass
     public void initialise() {
         AccountsPage = new AccountsPage(driver);
         NewAccountPage = new NewAccountPage(driver);
         AccountDetailsPage = new AccountDetailsPage(driver);
-        AccountFactory = new AccountFactory();
     }
 
     @Test(groups = {"regression"}, dataProvider = "AccountTestData")

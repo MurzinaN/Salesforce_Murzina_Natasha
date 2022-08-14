@@ -16,14 +16,12 @@ public class LeadsTest extends BaseTest {
     private LeadsPage LeadsPage;
     private NewLeadPage NewLeadPage;
     private LeadDetailsPage LeadDetailsPage;
-    private LeadFactory LeadFactory;
 
     @BeforeClass
     public void initialise() {
         LeadsPage = new LeadsPage(driver);
         NewLeadPage = new NewLeadPage(driver);
         LeadDetailsPage = new LeadDetailsPage(driver);
-        LeadFactory = new LeadFactory();
     }
 
     @Test(groups = {"regression"}, dataProvider = "leadTestData")
