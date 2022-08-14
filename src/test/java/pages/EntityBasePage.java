@@ -1,11 +1,13 @@
 package pages;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+@Log4j2
 public abstract class EntityBasePage extends BasePage {
 
     private final static By NEW_BUTTON = By.cssSelector("div.active a[title=New]");
@@ -23,6 +25,7 @@ public abstract class EntityBasePage extends BasePage {
     }
 
     public void clickNewButton() {
+        log.info("Click button New");
         driver.findElement(NEW_BUTTON).click();
     }
 

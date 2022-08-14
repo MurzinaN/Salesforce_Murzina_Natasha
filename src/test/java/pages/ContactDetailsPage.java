@@ -3,11 +3,13 @@ package pages;
 import elements.LightningFormattedElement;
 import enums.LeadSource;
 import enums.Salutation;
+import lombok.extern.log4j.Log4j2;
 import models.Contact;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import utils.StringSplit;
 
+@Log4j2
 public class ContactDetailsPage extends BasePage {
     private final static By ICON_CONTACT_DETAILS_LOCATOR = By.xpath("//records-highlights-icon");
 
@@ -21,10 +23,11 @@ public class ContactDetailsPage extends BasePage {
     }
 
     public Contact getContactInfo() {
+        log.info("Filling form Contact with recived data");
         String fullName = new LightningFormattedElement(driver, "Name").getText();
         StringSplit.fullNameSplit(fullName);
         String accountName = new LightningFormattedElement(driver, "Account Name").getText();
-        Contact.ContactBuilder contactBuilder = new Contact.ContactBuilder(StringSplit.fullNameSplit(fullName)[2], StringSplit.textSplit(accountName));
+        Contact.ContactBuilder contactBuilder = contactBuilder = Contact.builder().lastName(StringSplit.fullNameSplit(fullName)[2]).accountName(StringSplit.textSplit(accountName));
         contactBuilder.salutation(Salutation.fromString(StringSplit.fullNameSplit(fullName)[0]));
         contactBuilder.firstName(StringSplit.fullNameSplit(fullName)[1]);
         String phone = new LightningFormattedElement(driver, "Phone").getText();

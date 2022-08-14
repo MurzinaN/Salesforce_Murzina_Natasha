@@ -1,8 +1,10 @@
 package pages;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@Log4j2
 public class HomePage extends BasePage {
     private final static By USER_ICON_LOCATOR = By.cssSelector(".slds-avatar_profile-image-small");
     private final static By LEADS_TAB_LOCATOR = By.xpath("//a[@title='Leads']");
@@ -30,14 +32,17 @@ public class HomePage extends BasePage {
     }
 
     public void openLeadsTab() {
+        log.info("Click Leads tab");
         jsClick(driver.findElement(LEADS_TAB_LOCATOR));
     }
 
     public void openAccountsTab() {
+        log.info("Click Account tab");
         jsClick(driver.findElement(ACCOUNTS_TAB_LOCATOR));
     }
 
     public void openContactsTab() {
+        log.info("Click Contact tab");
         jsClick(driver.findElement(CONTACTS_TAB_LOCATOR));
     }
 
@@ -48,7 +53,12 @@ public class HomePage extends BasePage {
         return actualText;
     }
 
+    public void waitLForLogoutClickable() {
+        waitForElementClickable(USER_BUTTON);
+    }
+
     public void clickLogout() {
+        log.info("Logout");
         driver.findElement(USER_BUTTON).click();
         driver.findElement(LOGOUT_BUTTON).click();
     }

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Listeners(TestListener.class)
 public class BaseTest {
-    protected final static String USER_NAME = "solodchenko13-ehck@force.com";
+    protected final static String USER_NAME = "solodchenko_n-xtds@force.com";
     protected final static String PASSWORD = "qa19qa19";
     protected WebDriver driver;
     protected LoginPage LoginPage;

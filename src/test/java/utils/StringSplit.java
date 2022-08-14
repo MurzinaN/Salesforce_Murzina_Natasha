@@ -13,4 +13,9 @@ public class StringSplit {
         splitText = splitText.replace(" ", "");
         return splitText;
     }
+
+    public static String dollarSplit(String annualRevenue) {
+        String annualRevenueSplit = annualRevenue.replace("$", "");
+        return annualRevenueSplit;
+    }
 }

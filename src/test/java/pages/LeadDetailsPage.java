@@ -2,11 +2,13 @@ package pages;
 
 import elements.LightningFormattedElement;
 import enums.*;
+import lombok.extern.log4j.Log4j2;
 import models.Lead;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import utils.StringSplit;
 
+@Log4j2
 public class LeadDetailsPage extends BasePage {
 
     private final static By ICON_LEAD_DETAILS_LOCATOR = By.xpath("//records-highlights-icon");
@@ -21,6 +23,7 @@ public class LeadDetailsPage extends BasePage {
     }
 
     public Lead getLeadInfo() {
+        log.info("Filling form Lead with recived data");
         String fullName = new LightningFormattedElement(driver, "Name").getText();
         StringSplit.fullNameSplit(fullName);
         String fullAddress = new LightningFormattedElement(driver, "Address").getText();
@@ -46,10 +49,9 @@ public class LeadDetailsPage extends BasePage {
             zip = null;
             country = null;
         }
-
         String company = new LightningFormattedElement(driver, "Company").getText();
         String leadStatus = new LightningFormattedElement(driver, "Lead Status").getText();
-        Lead.LeadBuilder leadBuilder = new Lead.LeadBuilder(StringSplit.fullNameSplit(fullName)[2], company, LeadStatus.fromString(leadStatus));
+        Lead.LeadBuilder leadBuilder = Lead.builder().lastName(StringSplit.fullNameSplit(fullName)[2]).company(company).leadStatus(LeadStatus.fromString(leadStatus));
         leadBuilder.salutation(Salutation.fromString(StringSplit.fullNameSplit(fullName)[0]));
         leadBuilder.firstName(StringSplit.fullNameSplit(fullName)[1]);
         leadBuilder.street(street);
@@ -82,9 +84,8 @@ public class LeadDetailsPage extends BasePage {
             leadBuilder.noOfEmployees(noOfEmployees);
         }
         String annualRevenue = new LightningFormattedElement(driver, "Annual Revenue").getText();
-        annualRevenue = annualRevenue.replace("$", "");
         if (annualRevenue != "") {
-            leadBuilder.annualRevenue(annualRevenue);
+            leadBuilder.annualRevenue(StringSplit.dollarSplit(annualRevenue));
         }
         String leadSource = new LightningFormattedElement(driver, "Lead Source").getText();
         if (leadSource != "") {

@@ -4,10 +4,12 @@ import elements.LightningCombobox;
 import elements.LightningInput;
 import elements.SelectContact;
 import elements.Textarea;
+import lombok.extern.log4j.Log4j2;
 import models.Contact;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+@Log4j2
 public class NewContactPage extends BaseModal {
     private static final By BIRTHDATE = By.xpath("//input[@name='Birthdate']");
 
@@ -16,9 +18,12 @@ public class NewContactPage extends BaseModal {
     }
 
     public void fillForm(Contact inputContact) {
+        log.info("Filling form Contact");
         new LightningInput(driver, "First Name").setValue(inputContact.getFirstName());
         new LightningInput(driver, "Last Name").setValue(inputContact.getLastName());
-        new LightningCombobox(driver, "Salutation").selectByVisibleText(inputContact.getSalutation().getName());
+        if (inputContact.getSalutation() != null) {
+            new LightningCombobox(driver, "Salutation").selectByVisibleText(inputContact.getSalutation().getName());
+        }
         new LightningInput(driver, "Phone").setValue(inputContact.getPhone());
         new LightningInput(driver, "Mobile").setValue(inputContact.getMobile());
         new LightningInput(driver, "Email").setValue(inputContact.getEmail());
@@ -41,7 +46,9 @@ public class NewContactPage extends BaseModal {
         new LightningInput(driver, "Asst. Phone").setValue(inputContact.getAsstPhone());
         new LightningInput(driver, "Assistant").setValue(inputContact.getAssistant());
         new LightningInput(driver, "Department").setValue(inputContact.getDepartment());
-        new LightningCombobox(driver, "Lead Source").selectByVisibleText(inputContact.getLeadSource().getName());
+        if (inputContact.getLeadSource() != null) {
+            new LightningCombobox(driver, "Lead Source").selectByVisibleText(inputContact.getLeadSource().getName());
+        }
         if (inputContact.getBirthdate() != null) {
             driver.findElement(BIRTHDATE).sendKeys(inputContact.getBirthdate());
         }
